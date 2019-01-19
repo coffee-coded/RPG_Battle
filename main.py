@@ -258,7 +258,6 @@ while running:
 	print("============================================================================")
 
 	for player in players:
-		check_battle_over()
 		print("\n")
 		print("Name                        HP                                      MP")
 		player.get_stats()
