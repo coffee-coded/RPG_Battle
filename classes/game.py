@@ -105,12 +105,14 @@ class Person:
 
 		if (self.hp > 999):
 			comp = ""
-		elif self.hp < 1000 and self.hp > 99:
-			comp = " "
-		elif self.hp < 100 and self.hp > 9:
+		elif self.hp < 10000 and self.hp > 999:
 			comp = "  "
-		else:
+		elif self.hp < 1000 and self.hp > 99:
 			comp = "   "
+		elif self.hp < 100 and self.hp > 9:
+			comp = "    "
+		else:
+			comp = "     "
 
 		print("                              __________________________________________________")
 		print(bcolors.BOLD + self.name + " :     " + comp +

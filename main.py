@@ -1,12 +1,8 @@
+import random
+
 from classes.game import Person, bcolors
 from classes.inventory import Item
 from classes.magic import Spell
-import random
-
-
-
-
-
 
 # Creating Black Magics
 fire = Spell("Fire", 25, 600, "black")
@@ -197,6 +193,59 @@ input()
 
 print(bcolors.BOLD + bcolors.FAIL + "THE ENEMY ATTACKS !" + bcolors.ENDC)
 
+
+def check_battle_over():
+	global defeated_enemies, defeated_players, enemy, player, running
+	defeated_enemies = 0
+	defeated_players = 0
+	for enemy in enemies:
+		if enemy.get_hp() == 0:
+			print(bcolors.WARNING + bcolors.BOLD + "Enemy defeated : ", enemy.name + bcolors.ENDC)
+			defeated_enemies += 1
+	for player in players:
+		if player.get_hp() == 0:
+			print(bcolors.FAIL + bcolors.BOLD + "Players lost : ", player.name + bcolors.ENDC)
+			defeated_players += 1
+	if defeated_enemies == len(enemies):
+		print(bcolors.OKGREEN + bcolors.BOLD + "You Win ! Game Over ! " + bcolors.ENDC)
+		running = False
+
+	elif defeated_players == len(players):
+		print(bcolors.FAIL + bcolors.BOLD + "Enemies Won!  Game Over !" + bcolors.ENDC)
+		running = False
+
+
+def enemy_magic_attack():
+	global magic_choice, spell, magic_dmg
+	if (enemy.get_hp()/enemy.get_max_hp()) <0.2:
+		for spell in enemy.magic:
+			if spell.type == "white" and enemy.mp <spell.cost:
+				break
+	else:
+		for spell in enemy.magic:
+			if spell.type == "black" and enemy.mp <spell.cost:
+				break
+	magic_dmg = spell.generate_damage()
+	enemy.reduce_mp(spell.cost)
+
+	flag = 0
+	if enemy.mp < spell.cost:
+		for spell in enemy.magic:
+			if(enemy.mp > spell.cost):
+				flag = 1
+				break
+		if flag == 0:
+			spell=-1
+			magic_dmg=-1
+			return spell, magic_dmg
+		enemy_magic_attack()
+
+	else:
+		return spell,magic_dmg
+
+
+
+
 while running:
 
 	print("  Name                        HP                                      MP")
@@ -209,19 +258,7 @@ while running:
 	print("============================================================================")
 
 	for player in players:
-		i=0
-		for player in players:
-			i+=1
-			if player.get_hp() == 0:
-				print(bcolors.FAIL + bcolors.BOLD + "\n\n" + player.name + "has died\n\n" + bcolors.ENDC)
-				del players[i-1]
-		i=0
-		for enemy in enemies:
-			i+=1
-			if enemy.get_hp() == 0:
-				print(bcolors.WARNING + bcolors.BOLD + "\n\n" + enemy.name + "has died\n\n" + bcolors.ENDC)
-				del enemies[i-1]
-
+		check_battle_over()
 		print("\n")
 		print("Name                        HP                                      MP")
 		player.get_stats()
@@ -231,6 +268,7 @@ while running:
 		if choice == "q":
 			exit(0)
 		choice = int(choice) - 1
+
 
 		if choice == 0:
 			dmg = player.generate_damage()
@@ -295,34 +333,38 @@ while running:
 				enemies[enemy].take_damage(item.prop)
 				print(bcolors.WARNING + "\n" + item.name + " deals " + str(item.prop) + " points of damage to " +enemies[enemy].name+ bcolors.ENDC)
 
-	enemy_choice = 1
-	target = random.randrange(0,len(players))
+	check_battle_over()
 
-	enemy_dmg = enemies[0].generate_damage()
-	players[target].take_damage(enemy_dmg)
-	print(bcolors.FAIL + "\nEnemy attacked for", enemy_dmg, "points of damage." + bcolors.ENDC)
+
+	for enemy in enemies:
+		check_battle_over()
+		enemy_choice = random.randrange(0,2)
+
+		target = random.randrange(0, len(players))
+
+		if enemy_choice == 0:
+			enemy_dmg = enemy.generate_damage()
+			players[target].take_damage(enemy_dmg)
+			print(bcolors.FAIL + "\n"+enemy.name+" attacked for", enemy_dmg, "points of damage to "+players[target].name + bcolors.ENDC)
+		elif enemy_choice == 1:
+			spell,magic_dmg = enemy_magic_attack()
+
+			if spell == -1:
+				print(bcolors.FAIL+"\n"+enemy.get_name()+"tried to use Magic but didnt have enough magic points"+bcolors.ENDC)
+				continue
+
+			if spell.type == "white":
+				enemy.heal(magic_dmg)
+				print(bcolors.FAIL + "\n" +enemy.get_name()+" used "+ spell.name + " heals for " + str(magic_dmg), "HP" + bcolors.ENDC)
+			elif spell.type == "black":
+
+				players[target].take_damage(magic_dmg)
+				print(bcolors.OKBLUE + "\n" +enemy.get_name()+" used "+ spell.name + " deals " + str(magic_dmg), "points of damage to " +players[target].name+ bcolors.ENDC)
 
 	print("""-------------------------------------------------------- 
 	
 			""")
 	# print("Enemy HP  : " + bcolors.FAIL + str(enemy.get_hp()) + "/" + str(enemy.get_max_hp()) + bcolors.ENDC + "\n")
 
-	defeated_enemies =0
-	defeated_players = 0
-	for enemy in enemies:
-		if enemy.get_hp() ==0:
-			print(bcolors.WARNING+bcolors.BOLD+"Enemy defeated : ",enemy.name+bcolors.ENDC)
-			defeated_enemies+=1
+	check_battle_over()
 
-	for player in players:
-		if player.get_hp() ==0:
-			print(bcolors.FAIL+bcolors.BOLD+"Players lost : ",player.name+bcolors.ENDC)
-			defeated_players+=1
-
-	if defeated_enemies == len(enemies):
-		print(bcolors.OKGREEN + bcolors.BOLD + "You Win ! Game Over ! " + bcolors.ENDC)
-		running = False
-
-	elif defeated_players == len(players):
-		print(bcolors.FAIL + bcolors.BOLD + "Enemies Won!  Game Over !" + bcolors.ENDC)
-		running = False
