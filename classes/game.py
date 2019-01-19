@@ -66,6 +66,16 @@ class Person:
 			print("    " + str(i) + "." + item)
 			i += 1
 
+	def choose_target(self,enemies):
+		i =1
+		print("\n" + bcolors.FAIL + bcolors.BOLD + "TARGET : " + bcolors.ENDC)
+		for enemy in enemies:
+			print("    "+str(i)+"."+enemy.name)
+			i+=1
+		choice = int(input("Choose Target : ")) -1
+		return choice
+
+
 	def choose_magic(self):
 		i = 1
 		print("\n" + bcolors.OKBLUE + bcolors.BOLD + "MAGIC : " + bcolors.ENDC)
@@ -81,8 +91,54 @@ class Person:
 			      "(x" + str(item["quantity"]) + ")")
 			i += 1
 
-
 	def get_enemy_stats(self):
+		bar = ""
+		hp = (self.hp / self.max_hp) * 50
+		while len(bar) < 50:
+			if hp > 0:
+				bar += "█"
+				hp -= 1
+			else:
+				bar += " "
+
+		comp = ""
+
+		if (self.hp > 999):
+			comp = ""
+		elif self.hp < 1000 and self.hp > 99:
+			comp = " "
+		elif self.hp < 100 and self.hp > 9:
+			comp = "  "
+		else:
+			comp = "   "
+
+		print("                              __________________________________________________")
+		print(bcolors.BOLD + self.name + " :     " + comp +
+		      str(self.hp) + " /" + str(
+			self.max_hp) + "   |" + bcolors.FAIL + bar + bcolors.ENDC + bcolors.BOLD + "|    " + bcolors.ENDC)
+
+	def get_stats(self):
+
+		name_come = ""
+
+		if len(self.name) == 7:
+			name_come = ""
+		elif len(self.name) == 6:
+			name_come = " "
+		elif len(self.name) == 5:
+			name_come = "  "
+		elif len(self.name) == 4:
+			name_come = "   "
+		elif len(self.name) == 3:
+			name_come = "    "
+		elif len(self.name) == 2:
+			name_come = "     "
+		elif len(self.name) == 1:
+			name_come = "      "
+		elif len(self.name) ==0:
+			name_come = "       "
+
+
 		bar = ""
 		hp = (self.hp / self.max_hp) * 25
 		while len(bar) < 25:
@@ -119,53 +175,8 @@ class Person:
 		else:
 			comp_mp = " "
 
-		print("                          _________________________               __________")
-		print(bcolors.BOLD + self.name + " :     " + comp +
+		print("                              _________________________               __________")
+		print(bcolors.BOLD + name_come+self.name + " :     " + comp +"  "+
 		      str(self.hp) + " /" + str(
-			self.max_hp) + "   |" + bcolors.FAIL + bar + bcolors.ENDC + bcolors.BOLD + "|    " + comp_mp +
-		      str(self.mp) + "/" + str(self.max_mp) + "  |" + bcolors.WARNING + mp_bar + bcolors.ENDC + "|")
-
-	def get_stats(self):
-
-		bar = ""
-		hp = (self.hp/self.max_hp)*25
-		while len(bar)<25:
-			if hp>0:
-				bar += "█"
-				hp-=1
-			else:
-				bar +=" "
-
-		comp = ""
-
-		if(self.hp>999):
-			comp = ""
-		elif self.hp<1000 and self.hp >99:
-			comp = " "
-		elif self.hp <100 and self.hp >9:
-			comp = "  "
-		else:
-			comp = "   "
-
-		mp_bar = ""
-		mp = (self.mp/self.max_mp)*10
-		while len(mp_bar)<10:
-			if mp >0:
-				mp_bar+="█"
-				mp-=1
-			else:
-				mp_bar +=" "
-		comp_mp = ""
-		if self.mp>99:
-			comp_mp= ""
-		elif(self.mp>9 and self.mp<100) :
-			comp_mp = ""
-		else:
-			comp_mp=" "
-
-
-
-		print("                          _________________________               __________")
-		print(bcolors.BOLD + self.name + " :     " +comp+
-		      str(self.hp) + " /" + str(self.max_hp) + "   |" + bcolors.OKGREEN + bar + bcolors.ENDC + bcolors.BOLD + "|    " +comp_mp+
-		      str(self.mp)+"/"+str(self.max_mp)+"  |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
+			self.max_hp) + "   |" + bcolors.OKGREEN + bar + bcolors.ENDC + bcolors.BOLD + "|    " + comp_mp +
+		      str(self.mp) + "/" + str(self.max_mp) + "  |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
