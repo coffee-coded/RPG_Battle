@@ -1,6 +1,4 @@
 import random
-from .magic import Spell
-
 
 class bcolors:
 	HEADER = '\033[95m'
