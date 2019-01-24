@@ -32,6 +32,9 @@ class Person:
 		self.hp -= dmg
 		if self.hp < 0:
 			self.hp = 0
+
+
+
 		return self.hp
 
 	def get_name(self):
@@ -94,28 +97,24 @@ class Person:
 		hp = (self.hp / self.max_hp) * 50
 		while len(bar) < 50:
 			if hp > 0:
-				bar += "█"
+				bar += "▓"
 				hp -= 1
 			else:
-				bar += " "
+				bar += "░"
 
-		comp = ""
+		mp_bar = ""
+		mp = (self.mp / self.max_mp) * 25
+		while len(mp_bar) < 25:
+			if mp > 0:
+				mp_bar += "▓"
+				mp -= 1
+			else:
+				mp_bar += "░"
 
-		if (self.hp > 999):
-			comp = ""
-		elif self.hp < 10000 and self.hp > 999:
-			comp = "  "
-		elif self.hp < 1000 and self.hp > 99:
-			comp = "   "
-		elif self.hp < 100 and self.hp > 9:
-			comp = "    "
-		else:
-			comp = "     "
-
-		print("                              __________________________________________________")
-		print(bcolors.BOLD + self.name + " :     " + comp +
-		      str(self.hp) + " /" + str(
-			self.max_hp) + "   |" + bcolors.FAIL + bar + bcolors.ENDC + bcolors.BOLD + "|    " + bcolors.ENDC)
+		print(bcolors.BOLD+bcolors.FAIL + self.name+bcolors.ENDC + "\n" +
+		      "Hp : "+str(self.hp) + " /" + str(
+			self.max_hp) + "\n" + bcolors.FAIL + bar + bcolors.ENDC + bcolors.ENDC + bcolors.BOLD + "\n"+
+		      "MP : "+str(self.mp) + "/" + str(self.max_mp) + "\n" + bcolors.OKBLUE + mp_bar + bcolors.ENDC)
 
 	def get_stats(self):
 
@@ -140,43 +139,23 @@ class Person:
 
 
 		bar = ""
-		hp = (self.hp / self.max_hp) * 25
-		while len(bar) < 25:
+		hp = (self.hp / self.max_hp) * 50
+		while len(bar) < 50:
 			if hp > 0:
-				bar += "█"
+				bar += "▓"
 				hp -= 1
 			else:
-				bar += " "
-
-		comp = ""
-
-		if (self.hp > 999):
-			comp = ""
-		elif self.hp < 1000 and self.hp > 99:
-			comp = " "
-		elif self.hp < 100 and self.hp > 9:
-			comp = "  "
-		else:
-			comp = "   "
+				bar += "░"
 
 		mp_bar = ""
-		mp = (self.mp / self.max_mp) * 10
-		while len(mp_bar) < 10:
+		mp = (self.mp / self.max_mp) * 25
+		while len(mp_bar) < 25:
 			if mp > 0:
-				mp_bar += "█"
+				mp_bar += "▓"
 				mp -= 1
 			else:
-				mp_bar += " "
-		comp_mp = ""
-		if self.mp > 99:
-			comp_mp = ""
-		elif (self.mp > 9 and self.mp < 100):
-			comp_mp = ""
-		else:
-			comp_mp = " "
+				mp_bar += "░"
 
-		print("                              _________________________               __________")
-		print(bcolors.BOLD + name_come+self.name + " :     " + comp +"  "+
-		      str(self.hp) + " /" + str(
-			self.max_hp) + "   |" + bcolors.OKGREEN + bar + bcolors.ENDC + bcolors.BOLD + "|    " + comp_mp +
-		      str(self.mp) + "/" + str(self.max_mp) + "  |" + bcolors.OKBLUE + mp_bar + bcolors.ENDC + "|")
+		print(bcolors.BOLD+bcolors.WARNING+self.name+bcolors.ENDC + "\n" +
+		      "HP : "+str(self.hp) + " /" + str(self.max_hp) + "\n" + bcolors.OKGREEN + bar + bcolors.ENDC + bcolors.BOLD + "\n"+
+		      "MP : "+str(self.mp) + "/" + str(self.max_mp) + "\n" + bcolors.OKBLUE + mp_bar + bcolors.ENDC)

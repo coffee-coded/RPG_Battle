@@ -249,7 +249,6 @@ def enemy_magic_attack():
 
 while running:
 
-	print("  Name                        HP                                      MP")
 
 	for player in players:
 		player.get_stats()
@@ -260,7 +259,6 @@ while running:
 
 	for player in players:
 		print("\n")
-		print("Name                        HP                                      MP")
 		player.get_stats()
 
 		player.choose_action()
